@@ -29,7 +29,7 @@ jobs:
         run: ./bin/make-wrangler.sh
 
       - name: Publish
-        run: npx @cloudflare/wrangler publish --env staging
+        run: npx @cloudflare/wrangler publish --env production
 
       - name: Deploy Success
         if: success()
