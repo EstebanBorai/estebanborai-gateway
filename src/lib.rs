@@ -22,10 +22,7 @@ pub async fn main(mut req: Request, env: Env) -> Result<Response> {
 
     log_request(&req);
 
-    let api_url = env
-        .var("API_URL")
-        .expect("Missing \"API_URL\" environment variable.")
-        .to_string();
+    let api_url = std::env!("API_URL").to_string();
     let api_url = Url::parse(&api_url).map_err(|err| worker::Error::from(err.to_string()))?;
     let client = reqwest::Client::new();
     let method = reqwest::Method::from_str(&req.method().to_string())
@@ -56,12 +53,7 @@ pub async fn main(mut req: Request, env: Env) -> Result<Response> {
 
     outgoing_headers.append(
         HeaderName::from_str("X-Auth-Token").map_err(|err| worker::Error::from(err.to_string()))?,
-        HeaderValue::from_str(
-            &env.var("X_AUTH_TOKEN")
-                .expect("Missing \"X_AUTH_TOKEN\" environment variable.")
-                .to_string(),
-        )
-        .unwrap(),
+        HeaderValue::from_str(std::env!("X_AUTH_TOKEN")).unwrap(),
     );
 
     let response = client
